@@ -52,8 +52,8 @@ public class CollectionsUsingSBootApplication implements CommandLineRunner {
 		//createEmployees();
 		//getMaxSalaryByDept();
 		//giveFewcolumns();
-		findPersonInfobyFirstNameorEmail();
-		findPersonINfobyFirstname();
+		//findPersonInfobyFirstNameorEmail();
+		//findPersonINfobyFirstname();
 	}
 	
 	
