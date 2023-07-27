@@ -32,7 +32,7 @@ public class ATMController {
     }
 
 
-    /* you can check resources/images/@OneToOne image for how to give input for @OneToOne so that both Customer and Account objects will be saved
+    /* you can check resources/images/@@OneToOneCustAcct image for how to give input for @OneToOne so that both Customer and Account objects will be saved
    POST=> localhost:8080/api/atm/postcust
     postman->body->raw->json
     _________

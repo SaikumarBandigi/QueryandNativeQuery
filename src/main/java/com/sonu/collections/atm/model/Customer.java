@@ -8,6 +8,10 @@ import lombok.ToString;
 import javax.persistence.*;
 
 /*
+why @OneToOne mapping?
+
+one table's primary key id becomes other table's foreign key so.....
+
 @OneToOne mapping can be done by unidirectional(one way) or bidirectional(two ways)
  */
 @Data
