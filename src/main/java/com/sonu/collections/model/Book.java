@@ -112,9 +112,29 @@ public class Book {
 			return result;
 
 		}
-		
-		
-		
-		
 
 }
+/*
+In this example, the @JoinTable annotation is used to define the mapping for a many-to-many relationship between two entities: Book and Publisher.
+The annotation is applied to one side of the relationship (either Book or Publisher)
+and specifies the join table that will be used to manage the association.
+
+Let's break down the parameters:
+
+name: Specifies the name of the join table in the database. In this case, the join table is named "book_publisher."
+
+joinColumns: Specifies the foreign key column(s) in the join table that correspond to the primary key(s) of the owning entity, which is Book in this
+ example. It indicates how the Book entity will be linked to the join table.
+
+name: Specifies the name of the column in the join table that will reference the primary key of the Book entity. In this case,
+the column is named "bookId."
+referencedColumnName: Specifies the name of the primary key column in the Book entity's table that the "bookId" column in the join table references.
+In this case, it references the "book_id" column in the Book entity.
+inverseJoinColumns: Specifies the foreign key column(s) in the join table that correspond to the primary key(s) of the associated entity,
+which is Publisher in this example. It indicates how the Publisher entity will be linked to the join table.
+
+name: Specifies the name of the column in the join table that will reference the primary key of the Publisher entity. In this case,
+the column is named "publisherId."
+referencedColumnName: Specifies the name of the primary key column in the Publisher entity's table that the "publisherId" column in the join table
+ references. In this case, it references the "publisher_id" column in the Publisher entity.
+ */

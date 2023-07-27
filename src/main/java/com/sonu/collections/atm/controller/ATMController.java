@@ -31,11 +31,29 @@ public class ATMController {
         this.customerRepository = customerRepository;
     }
 
-//    @PostMapping("/postcust")
-//    public Customer postCust(@RequestBody Customer customer) {
-//        return customerRepository.save(customer);
-//    }
-//
+
+    /*
+   POST=> localhost:8080/api/atm/postcust
+    postman->body->raw->json
+    _________
+    {
+    "name":"naveen",
+    "pin":"1234",
+    "account":
+    {
+       "accountNumber":"1515001",
+       "balance":"24000"
+    }
+}
+then this query makes sure to save the objects both in Customer and Account table...
+     */
+    @PostMapping("/postcust")
+    public Customer postCust(@RequestBody Customer customer) {
+        return customerRepository.save(customer);
+    }
+
+
+   // below query is optional since we are saving account object through Customer object itself
 //    @PostMapping("/postacct")
 //    public Account postAcct(@RequestBody Account account) {
 //        return accountRepository.save(account);
@@ -58,6 +76,9 @@ public class ATMController {
                 return account.getBalance();
             } else {
                 throw new AccountNotFoundException("Account not found");
+                /* since we are throwing AccountNotFoundException("Account not found") expliacity means either we use try-catch or @ExceptionHandler
+          if we use @ExceptionHandler then catch the AccountNotFoundException there and send some Response in ResponseEntity<> format
+            * */
             }
         } else {
             throw new CustomerAuthenticationException("Authentication failed");
