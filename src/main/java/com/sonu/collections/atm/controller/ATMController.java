@@ -32,7 +32,7 @@ public class ATMController {
     }
 
 
-    /*
+    /* you can check resources/images/@OneToOne image for how to give input for @OneToOne so that both Customer and Account objects will be saved
    POST=> localhost:8080/api/atm/postcust
     postman->body->raw->json
     _________
@@ -67,6 +67,7 @@ then this query makes sure to save the objects both in Customer and Account tabl
     }
 
 
+    // GET -> localhost:8080/api/atm/balance/1/1515001/1234
     @GetMapping("/balance/{customerId}/{accountNumber}/{pin}")
     public double checkBalance(@PathVariable String customerId, @PathVariable String accountNumber, @PathVariable String pin) {
         if (authenticateCustomer(customerId, pin)) {
@@ -76,8 +77,9 @@ then this query makes sure to save the objects both in Customer and Account tabl
                 return account.getBalance();
             } else {
                 throw new AccountNotFoundException("Account not found");
-                /* since we are throwing AccountNotFoundException("Account not found") expliacity means either we use try-catch or @ExceptionHandler
-          if we use @ExceptionHandler then catch the AccountNotFoundException there and send some Response in ResponseEntity<> format
+                /* since we are throwing AccountNotFoundException("Account not found") explicitly means either we use try-catch or @ExceptionHandler
+                to handle such exception if we use @ExceptionHandler then catch the AccountNotFoundException there and send some
+                Response in ResponseEntity<> format
             * */
             }
         } else {
@@ -85,6 +87,7 @@ then this query makes sure to save the objects both in Customer and Account tabl
         }
     }
 
+    // POST -> localhost:8080/api/atm/deposit/1/1515001?amount=1000&pin=1234
     @PostMapping("/deposit/{customerId}/{accountNumber}")
     public double deposit(@PathVariable String customerId, @PathVariable String accountNumber, @RequestParam double amount, @RequestParam String pin) {
         if (authenticateCustomer(customerId, pin)) {
@@ -104,7 +107,7 @@ then this query makes sure to save the objects both in Customer and Account tabl
         }
     }
 
-
+// POST -> localhost:8080/api/atm/withdraw/1/1515001?amount=6000&pin=1234
     @PostMapping("/withdraw/{customerId}/{accountNumber}")
     public double withdraw(@PathVariable String customerId, @PathVariable String accountNumber, @RequestParam double amount, @RequestParam String pin) {
         if (authenticateCustomer(customerId, pin)) {
