@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
+import java.util.NoSuchElementException;
 
 @RestController
 @RequestMapping("/api/atm")
@@ -53,12 +54,35 @@ then this query makes sure to save the objects both in Customer and Account tabl
     }
 
 
-   // below query is optional since we are saving account object through Customer object itself
+    // below query is optional since we are saving account object through Customer object itself
 //    @PostMapping("/postacct")
 //    public Account postAcct(@RequestBody Account account) {
 //        return accountRepository.save(account);
 //    }
 
+    //////////////////////////////////////
+        /*
+    http://localhost:8080/api/atm/getCust/0
+
+    Here if try to get the customer account which doesn't exist we get error so try to suppress the error using try-catch or ExceptionHandler
+    if we use .get() method if the value is present it returns object or if ou give wrong value then throws error.since,it's throwing error we
+    are catching it try-catch.
+    (or)
+    .orElse(new Customer()); -> it gives object if it finds or gives null object instead of giving error
+
+     */
+
+    @GetMapping("/getCust/{id}")
+    public Customer customer(@PathVariable Integer id) {
+
+        Customer customer = null;
+        try {
+            customer = customerRepository.findById(Long.valueOf(id)).get();
+        } catch (NoSuchElementException ex) {
+            System.out.println(ex);
+        }
+        return customer;
+    }
 
     @PostMapping("/authenticate")
     public boolean authenticateCustomer(@RequestParam String customerId, @RequestParam String pin) {
@@ -90,10 +114,10 @@ then this query makes sure to save the objects both in Customer and Account tabl
     // POST -> localhost:8080/api/atm/deposit/1/1515001?amount=1000&pin=1234
     @PostMapping("/deposit/{customerId}/{accountNumber}")
     public double deposit(@PathVariable String customerId, @PathVariable String accountNumber, @RequestParam double amount, @RequestParam String pin) {
+
         if (authenticateCustomer(customerId, pin)) {
             // Proceed with deposit
             Account account = accountRepository.findByAccountNumber(accountNumber);
-
             if (account != null) {
                 double currentBalance = account.getBalance();
                 account.setBalance(currentBalance + amount);
@@ -107,7 +131,7 @@ then this query makes sure to save the objects both in Customer and Account tabl
         }
     }
 
-// POST -> localhost:8080/api/atm/withdraw/1/1515001?amount=6000&pin=1234
+    // POST -> localhost:8080/api/atm/withdraw/1/1515001?amount=6000&pin=1234
     @PostMapping("/withdraw/{customerId}/{accountNumber}")
     public double withdraw(@PathVariable String customerId, @PathVariable String accountNumber, @RequestParam double amount, @RequestParam String pin) {
         if (authenticateCustomer(customerId, pin)) {
@@ -132,13 +156,16 @@ then this query makes sure to save the objects both in Customer and Account tabl
     }
 
 
-    @ExceptionHandler(AccountNotFoundException.class)
-    public ResponseEntity<Custom> handleAccountNotFoundException(AccountNotFoundException ex) {
-        // Customize the error message and response status here
-        // ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
-        Custom customerror = new Custom(ex.getMessage(), new Date());
-        return new ResponseEntity<>(customerror, HttpStatus.NOT_FOUND);
-    }
+
+
+// catch the AccountNotFoundException here and give response in string format or Custom type
+//    @ExceptionHandler(AccountNotFoundException.class)
+//    public ResponseEntity<Custom> handleAccountNotFoundException(AccountNotFoundException ex) {
+//        // Customize the error message and response status here
+//        // ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+//        Custom customerror = new Custom(ex.getMessage(), new Date());
+//        return new ResponseEntity<>(customerror, HttpStatus.NOT_FOUND);
+//    }
 
 
     @ExceptionHandler(CustomerAuthenticationException.class)
